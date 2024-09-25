@@ -1,4 +1,4 @@
-package org.nevent.festimania.artista;
+package org.nevent.festimania.domain.artista;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 

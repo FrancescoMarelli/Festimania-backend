@@ -1,8 +1,8 @@
 package org.nevent.festimania.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import org.nevent.festimania.artista.Artista;
-import org.nevent.festimania.artista.ArtistaRepository;
+import org.nevent.festimania.domain.artista.Artista;
+import org.nevent.festimania.domain.artista.ArtistaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
