@@ -1,7 +1,7 @@
 package org.nevent.festimania.security;
 
 import lombok.RequiredArgsConstructor;
-import org.nevent.festimania.usuario.UsuarioRepository;
+import org.nevent.festimania.domain.usuario.UsuarioRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;

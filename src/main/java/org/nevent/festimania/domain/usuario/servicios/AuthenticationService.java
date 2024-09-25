@@ -1,10 +1,10 @@
-package org.nevent.festimania.usuario.servicios;
+package org.nevent.festimania.domain.usuario.servicios;
 
 import lombok.RequiredArgsConstructor;
 import org.nevent.festimania.security.JwtService;
-import org.nevent.festimania.usuario.Role;
-import org.nevent.festimania.usuario.Usuario;
-import org.nevent.festimania.usuario.UsuarioRepository;
+import org.nevent.festimania.domain.usuario.Role;
+import org.nevent.festimania.domain.usuario.Usuario;
+import org.nevent.festimania.domain.usuario.UsuarioRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.User;

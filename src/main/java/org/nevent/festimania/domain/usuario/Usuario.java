@@ -1,4 +1,4 @@
-package org.nevent.festimania.usuario;
+package org.nevent.festimania.domain.usuario;
 
 import lombok.Getter;
 import lombok.Setter;

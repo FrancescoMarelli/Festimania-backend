@@ -1,4 +1,4 @@
-package org.nevent.festimania.usuario.servicios;
+package org.nevent.festimania.domain.usuario.servicios;
 
 import lombok.*;
 
