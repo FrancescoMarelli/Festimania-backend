@@ -15,6 +15,6 @@ public class Artista {
     Integer id;
     String nombre;
     String genero;
-    ArrayList canciones;
-    ArrayList albums;
+    ArrayList<String> canciones;
+    ArrayList<String> albums;
 }
