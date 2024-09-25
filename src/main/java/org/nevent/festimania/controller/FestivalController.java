@@ -6,6 +6,7 @@ import org.nevent.festimania.artista.ArtistaRepository;
 import org.nevent.festimania.festival.Festival;
 import org.nevent.festimania.festival.FestivalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.Console;
