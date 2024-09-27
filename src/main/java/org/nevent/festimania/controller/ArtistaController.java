@@ -24,8 +24,8 @@ public class ArtistaController {
     }
     @GetMapping("/{id}")
     @Operation(summary = "findById")
-    public ResponseEntity<Artista> findById(@PathVariable Integer id){
-        return ResponseEntity.of(artistaRepository.findById(id));
+    public ResponseEntity<Artista> findById(@PathVariable String id){
+        return ResponseEntity.of(artistaRepository.findById(Integer.valueOf(id)));
     }
 
     @PostMapping

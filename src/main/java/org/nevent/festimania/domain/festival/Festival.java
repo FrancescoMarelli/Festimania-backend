@@ -13,7 +13,7 @@ import java.util.ArrayList;
 @Document(collection = "festivales")
 public class Festival {
     @Id
-    Integer id;
+    String id;
     String nombre;
     String lugar;
     String fecha;

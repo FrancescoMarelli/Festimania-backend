@@ -12,7 +12,7 @@ import java.util.ArrayList;
 @Document(collection = "artistas")
 public class Artista {
     @Id
-    Integer id;
+    String id;
     String nombre;
     String genero;
     ArrayList<String> canciones;

@@ -63,8 +63,8 @@ public class FestivalController {
 
     @PutMapping("/{id}/artista/{idArtista}")
     @Operation(summary = "addArtist")
-    public ResponseEntity<Festival> agregarArtista(@PathVariable Integer id, @PathVariable Integer idArtista){
-        Festival festival = festivalRepository.findById(id).get();
+    public ResponseEntity<Festival> agregarArtista(@PathVariable String id, @PathVariable Integer idArtista){
+        Festival festival = festivalRepository.findById(Integer.valueOf(id)).get();
         Artista artista = artistaRepository.findById(idArtista).get();
         festival.getArtistas().add(artista);
         return ResponseEntity.ok(festivalRepository.save(festival));
