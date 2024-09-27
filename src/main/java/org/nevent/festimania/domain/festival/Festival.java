@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.nevent.festimania.domain.artista.Artista;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 @Document(collection = "festivales")
 public class Festival {
     @Id
+    @Indexed(unique = true)
     String id;
     String nombre;
     String lugar;

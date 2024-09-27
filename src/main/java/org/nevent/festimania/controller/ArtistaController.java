@@ -25,7 +25,7 @@ public class ArtistaController {
     @GetMapping("/{id}")
     @Operation(summary = "findById")
     public ResponseEntity<Artista> findById(@PathVariable String id){
-        return ResponseEntity.of(artistaRepository.findById(Integer.valueOf(id)));
+        return ResponseEntity.of(artistaRepository.findById(id));
     }
 
     @PostMapping
@@ -36,7 +36,7 @@ public class ArtistaController {
 
     @PutMapping("/{id}")
     @Operation(summary = "update")
-    public ResponseEntity<Artista> update(@PathVariable Integer id, @RequestBody Artista artista){
+    public ResponseEntity<Artista> update(@PathVariable String id, @RequestBody Artista artista){
         return ResponseEntity.of(artistaRepository.findById(id).map(a -> {
             a.setNombre(artista.getNombre());
             a.setGenero(artista.getGenero());
@@ -48,7 +48,7 @@ public class ArtistaController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "delete")
-    public ResponseEntity<Void> delete(@PathVariable Integer id){
+    public ResponseEntity<Void> delete(@PathVariable String id){
         artistaRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
