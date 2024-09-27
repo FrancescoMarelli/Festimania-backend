@@ -37,11 +37,16 @@ public class FestivalController {
     public ResponseEntity<Festival> findById(@PathVariable String id){
         return ResponseEntity.of(festivalRepository.findById(id));
     }
+
     @PostMapping
     @Operation(summary = "create")
-    public ResponseEntity<Festival> create(@RequestBody Festival festival){
+    public ResponseEntity<Festival> create(@RequestBody Festival festival) {
+        if (festivalRepository.existsById(festival.getId())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
         return ResponseEntity.ok(festivalRepository.save(festival));
     }
+
 
     @PutMapping("/{id}")
     @Operation(summary = "update")
@@ -57,9 +62,14 @@ public class FestivalController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "delete")
-    public ResponseEntity<Void> delete(@PathVariable String id){
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        if (!festivalRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Eliminar el festival
         festivalRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build(); // 200 OK
     }
 
     @PutMapping("/{id}/artista/{idArtista}")

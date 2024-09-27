@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import org.nevent.festimania.domain.artista.Artista;
 import org.nevent.festimania.domain.artista.ArtistaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,9 +31,13 @@ public class ArtistaController {
 
     @PostMapping
     @Operation(summary = "create")
-    public ResponseEntity<Artista> create(@RequestBody Artista artista){
+    public ResponseEntity<Artista> create(@RequestBody Artista artista) {
+        if (artistaRepository.findById(artista.getId()).isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build(); // 409 Conflict
+        }
         return ResponseEntity.ok(artistaRepository.save(artista));
     }
+
 
     @PutMapping("/{id}")
     @Operation(summary = "update")
@@ -48,8 +53,13 @@ public class ArtistaController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "delete")
-    public ResponseEntity<Void> delete(@PathVariable String id){
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        if (!artistaRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        // Eliminar el artista
         artistaRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
 }
