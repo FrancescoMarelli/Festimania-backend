@@ -39,7 +39,7 @@ bases de datos y loguearte con el usuario creado.
 ## Integración con el Frontend
 Para conectar el frontend, sigue estos pasos:
 
-Descarga el proyecto del frontend que utiliza Angular 17.
+Descarga el proyecto del frontend que utiliza Angular 17.3.9 desde el siguiente repositorio: [FestiManiaFrontend](https://github.com/FrancescoMarelli/Festimania-front)
 
 Instala PrimeNG en el proyecto del frontend.
 
