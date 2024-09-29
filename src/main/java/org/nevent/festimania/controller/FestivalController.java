@@ -72,27 +72,23 @@ public class FestivalController {
         return ResponseEntity.ok().build(); // 200 OK
     }
 
-    @PutMapping("/{id}/artista/{idArtista}")
+    @PutMapping("/{id}/artista")
     @Operation(summary = "addArtist")
-    public ResponseEntity<Festival> agregarArtista(@PathVariable String id, @PathVariable String idArtista) {
+    public ResponseEntity<Festival> agregarArtista(@PathVariable String id, @RequestBody Artista artista) {
         // Obtener el festival por su id
         Festival festival = festivalRepository.findById(id).orElse(null);
 
         if (festival == null) {
             return ResponseEntity.notFound().build();
         }
-        Artista artista;
-        if (artistaRepository.findById(idArtista).isEmpty()) {
-            artista = new Artista();
-            artista.setId(idArtista);
+
+        // Guardar artista si no existe
+        if (artistaRepository.findById(artista.getId()).isEmpty()) {
             artistaRepository.save(artista);
-        } else {
-            artista = artistaRepository.findById(idArtista).get();
         }
 
-        // Comprobar si el artista ya está en el festival por ID
+        // Comprobar si el artista ya está en el festival
         boolean artistaYaEnFestival = festival.getArtistas().stream()
-                .filter(a -> a.getId() != null) // Filtrar artistas sin ID
                 .anyMatch(a -> a.getId().equals(artista.getId()));
 
         if (!artistaYaEnFestival) {
@@ -100,6 +96,7 @@ public class FestivalController {
         } else {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
+
         return ResponseEntity.ok(festivalRepository.save(festival));
     }
 

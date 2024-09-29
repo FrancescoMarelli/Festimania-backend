@@ -29,7 +29,7 @@ public class ArtistaController {
         return ResponseEntity.of(artistaRepository.findById(id));
     }
 
-    @PostMapping
+    @PostMapping("/id")
     @Operation(summary = "create")
     public ResponseEntity<Artista> create(@RequestBody Artista artista) {
         if (artistaRepository.findById(artista.getId()).isPresent()) {
