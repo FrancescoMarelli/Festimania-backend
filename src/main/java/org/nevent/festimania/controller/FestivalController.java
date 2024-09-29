@@ -7,6 +7,7 @@ import org.nevent.festimania.domain.artista.ArtistaRepository;
 import org.nevent.festimania.domain.festival.Festival;
 import org.nevent.festimania.domain.festival.FestivalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,18 +34,23 @@ public class FestivalController {
 
     @GetMapping("/{id}")
     @Operation(summary = "findById")
-    public ResponseEntity<Festival> findById(@PathVariable Integer id){
+    public ResponseEntity<Festival> findById(@PathVariable String id){
         return ResponseEntity.of(festivalRepository.findById(id));
     }
+
     @PostMapping
     @Operation(summary = "create")
-    public ResponseEntity<Festival> create(@RequestBody Festival festival){
+    public ResponseEntity<Festival> create(@RequestBody Festival festival) {
+        if (festivalRepository.existsById(festival.getId())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
         return ResponseEntity.ok(festivalRepository.save(festival));
     }
 
+
     @PutMapping("/{id}")
     @Operation(summary = "update")
-    public ResponseEntity<Festival> update(@PathVariable Integer id, @RequestBody Festival festival){
+    public ResponseEntity<Festival> update(@PathVariable String id, @RequestBody Festival festival){
         return ResponseEntity.of(festivalRepository.findById(id).map(f -> {
             f.setNombre(festival.getNombre());
             f.setLugar(festival.getLugar());
@@ -56,27 +62,65 @@ public class FestivalController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "delete")
-    public ResponseEntity<Void> delete(@PathVariable Integer id){
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        if (!festivalRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Eliminar el festival
         festivalRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().build(); // 200 OK
     }
 
-    @PutMapping("/{id}/artista/{idArtista}")
+    @PutMapping("/{id}/artista")
     @Operation(summary = "addArtist")
-    public ResponseEntity<Festival> agregarArtista(@PathVariable String id, @PathVariable Integer idArtista){
-        Festival festival = festivalRepository.findById(Integer.valueOf(id)).get();
-        Artista artista = artistaRepository.findById(idArtista).get();
-        festival.getArtistas().add(artista);
+    public ResponseEntity<Festival> agregarArtista(@PathVariable String id, @RequestBody Artista artista) {
+        // Obtener el festival por su id
+        Festival festival = festivalRepository.findById(id).orElse(null);
+
+        if (festival == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        // Guardar artista si no existe
+        if (artistaRepository.findById(artista.getId()).isEmpty()) {
+            artistaRepository.save(artista);
+        }
+
+        // Comprobar si el artista ya está en el festival
+        boolean artistaYaEnFestival = festival.getArtistas().stream()
+                .anyMatch(a -> a.getId().equals(artista.getId()));
+
+        if (!artistaYaEnFestival) {
+            festival.getArtistas().add(artista);
+        } else {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+
         return ResponseEntity.ok(festivalRepository.save(festival));
     }
 
     @DeleteMapping("/{id}/artista/{idArtista}")
     @Operation(summary = "deleteArtist")
-    public ResponseEntity<Festival> eliminarArtista(@PathVariable Integer id, @PathVariable Integer idArtista){
-        Festival festival = festivalRepository.findById(id).get();
-        Artista artista = artistaRepository.findById(idArtista).get();
-        festival.getArtistas().remove(artista);
-        return ResponseEntity.ok(festivalRepository.save(festival));
+    public ResponseEntity<Festival> eliminarArtista(@PathVariable String id, @PathVariable String idArtista) {
+        Festival festival = festivalRepository.findById(id).orElse(null);
+
+        if (festival == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Artista artistaAEliminar = festival.getArtistas().stream()
+                .filter(a -> a.getId().equals(idArtista))
+                .findFirst()
+                .orElse(null);
+
+        if (artistaAEliminar == null) {
+            return ResponseEntity.notFound().build(); // El artista no está en el festival
+        } else {
+            festival.getArtistas().remove(artistaAEliminar); // Eliminar el artista de la lista
+            return ResponseEntity.ok(festivalRepository.save(festival)); // Guardar el festival actualizado
+        }
     }
+
 
 }
